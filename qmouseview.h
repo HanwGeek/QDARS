@@ -8,7 +8,10 @@
 #include <QGraphicsView>
 #include <QMouseEvent>
 #include <QWheelEvent>
+#include <QPaintEvent>
+#include <QPainter>
 #include <QApplication>
+#include <QRubberBand>
 #include <QPointF>
 #include <QDebug>
 
@@ -25,12 +28,14 @@ public:
     QPointF MapToImage(QPointF p);
     QPointF ImageToMap(QPointF p);
 
-
+    QRubberBand *rubberBand;
     int pixelSize;
     double upperLeftX;
     double upperLeftY;
     double lowerRightX;
     double lowerRightY;
+
+    //void paintEvent(QPaintEvent *e);
 
 signals:
     void emitNowPos(QPointF p);

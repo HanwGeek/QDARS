@@ -5,6 +5,7 @@
 #include <QTabWidget>
 #include <QImage>
 #include <QFile>
+#include <QLabel>
 #include <QWidget>
 #include <QTextStream>
 #include <QFileInfo>
@@ -16,6 +17,7 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDialog>
 #include <QComboBox>
 #include <QStatusBar>
 #include <QString>
@@ -41,6 +43,8 @@ public:
 public slots:
     void removeSelectedTab(int index);
     void importNewImage();
+    void activateFusionDialog();
+    void imgFusion();
     void changeViewConnects(int index);
     void updateStatusBar(QPointF p);
 
@@ -48,6 +52,10 @@ private:
     QTabWidget* h_tabs;
     QToolButton *h_btnImport;
     QToolButton *h_btnImgSave;
+    QToolButton *h_btnFusion;
+    QDialog *h_fusionDialog;
+    QComboBox *h_mutiImage;
+    QComboBox *h_highResoImage;
 
     QVector<QImgData*> h_images;
 
