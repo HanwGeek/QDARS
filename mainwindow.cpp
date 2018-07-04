@@ -87,7 +87,7 @@ void MainWindow::activateFusionDialog()
     }
     h_fusionDialog = new QDialog();
     h_fusionDialog->setWindowTitle("Image Fusion");
-    h_fusionDialog->resize(300, 200);
+    h_fusionDialog->setFixedSize(300, 200);
     h_fusionDialog->show();
 
     QLabel *h_strMutiImage = new QLabel("MutiSpectral Image:", h_fusionDialog);
@@ -96,12 +96,21 @@ void MainWindow::activateFusionDialog()
     QLabel *h_strHighResoImage = new QLabel("High Resolution Image:", h_fusionDialog);
     h_strHighResoImage->setGeometry(50, 60, 200, 20);
     h_strHighResoImage->show();
+    QLabel *h_strFusionType = new QLabel("Fusion type:", h_fusionDialog);
+    h_strFusionType->setGeometry(50, 100, 200, 20);
+    h_strFusionType->show();
     h_mutiImage = new QComboBox(h_fusionDialog);
     h_mutiImage->setGeometry(50, 40, 200, 20);
     h_mutiImage->show();
     h_highResoImage = new QComboBox(h_fusionDialog);
     h_highResoImage->setGeometry(50, 80, 200, 20);
     h_highResoImage->show();
+    h_fusionType = new QComboBox(h_fusionDialog);
+    h_fusionType->setGeometry(50, 120, 200, 20);
+    h_fusionType->addItem("Non-weight");
+    h_fusionType->addItem("Weight");
+    h_fusionType->addItem("IHS");
+    h_fusionType->show();
     for (int i = 0; i < h_images.count(); i++)
     {
         h_mutiImage->addItem(h_images[i]->imgName);
@@ -110,7 +119,7 @@ void MainWindow::activateFusionDialog()
 
     QToolButton *h_ok = new QToolButton(h_fusionDialog);
     h_ok->setText("OK");
-    h_ok->setGeometry(120, 120, 50, 20);
+    h_ok->setGeometry(120, 150, 50, 20);
     connect(h_ok, SIGNAL(clicked()), this, SLOT(imgFusion()));
     h_ok->show();
 }
@@ -121,7 +130,7 @@ void MainWindow::imgFusion()
     cv::Mat *mutiImage = h_images[h_mutiImage->currentIndex()]->img;
     cv::Mat *highResoImage = h_images[h_highResoImage->currentIndex()]->img;
     int band = mutiImage[0].channels();
-
+    h_weight = new double[band];
     cv::Mat resImage[band];
     for (int i = 0; i < band; i++)
     {
@@ -142,10 +151,26 @@ void MainWindow::imgFusion()
         }
     }
 
-    qDebug() << resImage[0].rows;
+    if (h_fusionType->currentIndex() != 2)
+    {
+        getWeight();
+    }
 }
 
+void MainWindow::getWeight()
+{
+    if (h_fusionType->currentIndex() == 1)
+    {
+        for (int i = 0; i < band; i++)
+        {
+            h_weight[i] = 0.5;
+        }
+    }
+    if (h_fusionType->currentIndex() == 2)
+    {
 
+    }
+}
 
 
 

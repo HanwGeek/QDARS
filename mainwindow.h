@@ -40,6 +40,7 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void getWeight();
 public slots:
     void removeSelectedTab(int index);
     void importNewImage();
@@ -56,11 +57,13 @@ private:
     QDialog *h_fusionDialog;
     QComboBox *h_mutiImage;
     QComboBox *h_highResoImage;
+    QComboBox *h_fusionType;
 
     QVector<QImgData*> h_images;
 
     int h_imgNum;
     int h_preIndex;
+    double *h_weight;
 };
 
 #endif // MAINWINDOW_H
