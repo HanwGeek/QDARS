@@ -41,14 +41,18 @@ public:
 public slots:
     void removeSelectedTab(int index);
     void importNewImage();
+    void changeViewConnects(int index);
+    void updateStatusBar(QPointF p);
 
 private:
     QTabWidget* h_tabs;
     QToolButton *h_btnImport;
+    QToolButton *h_btnImgSave;
 
-    QVector<QImgData> h_images;
+    QVector<QImgData*> h_images;
 
     int h_imgNum;
+    int h_preIndex;
 };
 
 #endif // MAINWINDOW_H

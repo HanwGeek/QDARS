@@ -9,6 +9,7 @@
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QApplication>
+#include <QPointF>
 #include <QDebug>
 
 class QMouseView : public QGraphicsView
@@ -21,8 +22,18 @@ public:
     void mouseMoveEvent(QMouseEvent *e);
     void mousePressEvent(QMouseEvent *e);
     void wheelEvent(QWheelEvent *e);
+    QPointF MapToImage(QPointF p);
+    QPointF ImageToMap(QPointF p);
+
+
+    int pixelSize;
+    double upperLeftX;
+    double upperLeftY;
+    double lowerRightX;
+    double lowerRightY;
 
 signals:
+    void emitNowPos(QPointF p);
     void emitWheel(double d);
 
 };
