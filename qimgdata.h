@@ -26,6 +26,7 @@ class QImgData:public QWidget
 public:
     QImgData(QWidget* parent = 0);
     QImgData(QString fileName);
+    QImgData(cv::Mat *srcImg, int numBands);
     ~QImgData();
     
     void imgShow(cv::Mat img);

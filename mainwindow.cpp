@@ -21,8 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     h_btnFusion = new QToolButton(this);
     h_btnFusion->setText("Fusion");
     h_btnFusion->setGeometry(50, 0, 50, 20);
-    connect(h_btnFusion, SIGNAL(clicked()), SLOT(activateFusionDialog()));
-
+    connect(h_btnFusion, SIGNAL(clicked()), this, SLOT(activateFusion()));
     h_preIndex = 0;
 }
 
@@ -58,6 +57,7 @@ void MainWindow::removeSelectedTab(int index)
 {
     h_tabs->removeTab(index);
     h_images.remove(index);
+    if (h_images.count() == 0) return;
     if (index == h_tabs->currentIndex())
     {
         connect(h_images[index]->imgView, SIGNAL(emitNowPos(QPointF)), this, SLOT(updateStatusBar(QPointF)));
@@ -77,98 +77,21 @@ void MainWindow::updateStatusBar(QPointF p)
     statusBar()->showMessage(msg);
 }
 
-
-void MainWindow::activateFusionDialog()
+void MainWindow::activateFusion()
 {
-    if (h_images.count() < 2)
-    {
-        QMessageBox::warning(NULL, "Warning", "Please import at least 2 images!", QMessageBox::Yes);
-        return;
-    }
-    h_fusionDialog = new QDialog();
-    h_fusionDialog->setWindowTitle("Image Fusion");
-    h_fusionDialog->setFixedSize(300, 200);
-    h_fusionDialog->show();
-
-    QLabel *h_strMutiImage = new QLabel("MutiSpectral Image:", h_fusionDialog);
-    h_strMutiImage->setGeometry(50, 20, 200, 20);
-    h_strMutiImage->show();
-    QLabel *h_strHighResoImage = new QLabel("High Resolution Image:", h_fusionDialog);
-    h_strHighResoImage->setGeometry(50, 60, 200, 20);
-    h_strHighResoImage->show();
-    QLabel *h_strFusionType = new QLabel("Fusion type:", h_fusionDialog);
-    h_strFusionType->setGeometry(50, 100, 200, 20);
-    h_strFusionType->show();
-    h_mutiImage = new QComboBox(h_fusionDialog);
-    h_mutiImage->setGeometry(50, 40, 200, 20);
-    h_mutiImage->show();
-    h_highResoImage = new QComboBox(h_fusionDialog);
-    h_highResoImage->setGeometry(50, 80, 200, 20);
-    h_highResoImage->show();
-    h_fusionType = new QComboBox(h_fusionDialog);
-    h_fusionType->setGeometry(50, 120, 200, 20);
-    h_fusionType->addItem("Non-weight");
-    h_fusionType->addItem("Weight");
-    h_fusionType->addItem("IHS");
-    h_fusionType->show();
-    for (int i = 0; i < h_images.count(); i++)
-    {
-        h_mutiImage->addItem(h_images[i]->imgName);
-        h_highResoImage->addItem(h_images[i]->imgName);
-    }
-
-    QToolButton *h_ok = new QToolButton(h_fusionDialog);
-    h_ok->setText("OK");
-    h_ok->setGeometry(120, 150, 50, 20);
-    connect(h_ok, SIGNAL(clicked()), this, SLOT(imgFusion()));
-    h_ok->show();
+    h_imgFusion = new QImgFusion(h_images);
+    connect(h_imgFusion, SIGNAL(emitNewImgData(cv::Mat*,int)), this, SLOT(creatNewTab(cv::Mat*,int)));
 }
 
-void MainWindow::imgFusion()
+void MainWindow::creatNewTab(cv::Mat *img, int numBands)
 {
-    h_fusionDialog->close();
-    cv::Mat *mutiImage = h_images[h_mutiImage->currentIndex()]->img;
-    cv::Mat *highResoImage = h_images[h_highResoImage->currentIndex()]->img;
-    int band = mutiImage[0].channels();
-    h_weight = new double[band];
-    cv::Mat resImage[band];
-    for (int i = 0; i < band; i++)
-    {
-        resImage[i] = cv::Mat::zeros(highResoImage[0].rows, highResoImage[0].cols, CV_8UC1);
-    }
+    QImgData *newImage = new QImgData(img, numBands);
+    h_images.append(newImage);
+    h_tabs->addTab(newImage->imgView, newImage->imgName);
 
-    if (mutiImage[0].rows != highResoImage[0].rows)
+    if (h_preIndex == 0)
     {
-        for (int i = 0; i < band; i++)
-        {
-            cv::resize(mutiImage[i], resImage[i], resImage[i].size());
-        }
-    }
-    else {
-        for (int i = 0; i < band; i++)
-        {
-            resImage[i] = mutiImage[i];
-        }
-    }
-
-    if (h_fusionType->currentIndex() != 2)
-    {
-        getWeight();
-    }
-}
-
-void MainWindow::getWeight()
-{
-    if (h_fusionType->currentIndex() == 1)
-    {
-        for (int i = 0; i < band; i++)
-        {
-            h_weight[i] = 0.5;
-        }
-    }
-    if (h_fusionType->currentIndex() == 2)
-    {
-
+        connect(h_images[h_preIndex]->imgView, SIGNAL(emitNowPos(QPointF)), this, SLOT(updateStatusBar(QPointF)));
     }
 }
 

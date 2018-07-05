@@ -56,6 +56,7 @@ QImgData::QImgData(QString fileName)
     {
         imgShowInView = img[0];
     }
+        imgView->resize(imgShowInView.cols, imgShowInView.rows);
 
     connect(imgView, SIGNAL(emitWheel(double)), this, SLOT(wheelZoom(double)));
 
@@ -65,20 +66,51 @@ QImgData::QImgData(QString fileName)
     isConvert = 0;
 }
 
+QImgData::QImgData(cv::Mat *srcImg, int numBands)
+{
+    imgView = new QMouseView(this);
+    imgView->setBackgroundBrush(QBrush(QColor(0,0,0)));
+    imgScene = new QGraphicsScene(this);
+
+    band = numBands;
+    img = new cv::Mat[band];
+    for (int i = 0; i < band; i++)
+    {
+        img[i] = srcImg[i];
+    }
+
+    if (band >= 3)
+    {
+        cv::Mat channel[3];
+
+        channel[0] = img[0];
+        channel[1] = img[1];
+        channel[2] = img[2];
+
+        cv::merge(channel, 3, imgShowInView);
+    }
+    if (band == 1)
+    {
+        imgShowInView = img[0];
+    }
+
+    imgName = "result image";
+    pixelSize = 0;
+    upperLeftX = upperLeftY = 0;
+    lowerRightX = lowerRightY = 0;
+    connect(imgView, SIGNAL(emitWheel(double)), this, SLOT(wheelZoom(double)));
+
+    imgShow(imgShowInView);
+
+    scale = 1;
+    isConvert = 1;
+}
+
 QImgData::~QImgData()
 {
 
 }
 
-//QRect QImgData::MapToImage(QRect Map)
-//{
-//    int x = (Map.x() - upperLeftX) / pixelSize;
-//    int y = (upperLeftY - Map.y()) / pixelSize;
-//    int width = Map.width() / pixelSize;
-//    int height = Map.height() / pixelSize;
-//    QRect Image(x, y, width, height);
-//    return Image;
-//}
 
 QPointF QImgData::MapToImage(QPointF p)
 {
@@ -86,17 +118,6 @@ QPointF QImgData::MapToImage(QPointF p)
     double y = (upperLeftY - p.y()) / pixelSize;
     return QPointF(x, y);
 }
-
-
-//QRect QImgData::ImageToMap(QRect Image)
-//{
-//    int x = Image.x() * pixelSize + upperLeftX;
-//    int y = upperLeftY - Image.y() * pixelSize;
-//    int width = Image.width() * pixelSize;
-//    int height = Image.height() * pixelSize;
-//    QRect Map(x, y, width, height);
-//    return Map;
-//}
 
 QPointF QImgData::ImageToMap(QPointF p)
 {

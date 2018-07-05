@@ -17,8 +17,7 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QDialog>
-#include <QComboBox>
+
 #include <QStatusBar>
 #include <QString>
 #include <QPixmap>
@@ -29,6 +28,7 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <qimgdata.h>
+#include <qimgfusion.h>
 #include <math.h>
 #include <QDebug>
 
@@ -40,26 +40,23 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void getWeight();
+    QVector<QImgData*> h_images;
 public slots:
     void removeSelectedTab(int index);
     void importNewImage();
-    void activateFusionDialog();
-    void imgFusion();
     void changeViewConnects(int index);
     void updateStatusBar(QPointF p);
-
+    void activateFusion();
+    void creatNewTab(cv::Mat *img, int numBands);
+    //void bcastImages(QVector<QImgData*> *images);
 private:
     QTabWidget* h_tabs;
     QToolButton *h_btnImport;
     QToolButton *h_btnImgSave;
     QToolButton *h_btnFusion;
-    QDialog *h_fusionDialog;
-    QComboBox *h_mutiImage;
-    QComboBox *h_highResoImage;
-    QComboBox *h_fusionType;
 
-    QVector<QImgData*> h_images;
+
+    QImgFusion *h_imgFusion;
 
     int h_imgNum;
     int h_preIndex;

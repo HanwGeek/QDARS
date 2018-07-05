@@ -41,12 +41,9 @@ QPointF QMouseView::ImageToMap(QPointF p)
     int x = p.x() * pixelSize + upperLeftX;
     int y = upperLeftY - p.y() * pixelSize;
     return QPointF(x, y);
+
 }
 
-//void QMouseView::paintEvent(QPaintEvent *e)
-//{
-
-//}
 
 
 
