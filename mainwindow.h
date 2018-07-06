@@ -17,7 +17,6 @@
 #include <QGraphicsScene>
 #include <QMessageBox>
 #include <QFileDialog>
-
 #include <QStatusBar>
 #include <QString>
 #include <QPixmap>
@@ -29,6 +28,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <qimgdata.h>
 #include <qimgfusion.h>
+#include <qbuildextract.h>
 #include <math.h>
 #include <QDebug>
 
@@ -47,6 +47,7 @@ public slots:
     void changeViewConnects(int index);
     void updateStatusBar(QPointF p);
     void activateFusion();
+    void activateBuildExtract();
     void creatNewTab(cv::Mat *img, int numBands);
     //void bcastImages(QVector<QImgData*> *images);
 private:
@@ -54,10 +55,10 @@ private:
     QToolButton *h_btnImport;
     QToolButton *h_btnImgSave;
     QToolButton *h_btnFusion;
-
+    QToolButton *h_btnBuildExtract;
 
     QImgFusion *h_imgFusion;
-
+    QBuildExtract *h_imgBuildExtract;
     int h_imgNum;
     int h_preIndex;
     double *h_weight;

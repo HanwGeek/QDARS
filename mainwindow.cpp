@@ -23,6 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
     h_btnFusion->setGeometry(50, 0, 50, 20);
     connect(h_btnFusion, SIGNAL(clicked()), this, SLOT(activateFusion()));
     h_preIndex = 0;
+
+    h_btnBuildExtract = new QToolButton(this);
+    h_btnBuildExtract->setText("Building Extract");
+    h_btnBuildExtract->setGeometry(100, 0, 200, 20);
+    connect(h_btnBuildExtract, SIGNAL(clicked()), this, SLOT(activateBuildExtract()));
 }
 
 MainWindow::~MainWindow()
@@ -81,6 +86,13 @@ void MainWindow::activateFusion()
 {
     h_imgFusion = new QImgFusion(h_images);
     connect(h_imgFusion, SIGNAL(emitNewImgData(cv::Mat*,int)), this, SLOT(creatNewTab(cv::Mat*,int)));
+}
+
+void MainWindow::activateBuildExtract()
+{
+    h_imgBuildExtract = new QBuildExtract(h_images[h_tabs->currentIndex()]);
+    connect(h_imgBuildExtract, SIGNAL(emitNewImgData(cv::Mat*,int)), this, SLOT(creatNewTab(cv::Mat*,int)));
+    h_imgBuildExtract->extract();
 }
 
 void MainWindow::creatNewTab(cv::Mat *img, int numBands)
