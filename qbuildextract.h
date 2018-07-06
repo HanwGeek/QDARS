@@ -17,8 +17,6 @@ public:
 
     cv::Mat *img;
     cv::Mat *resImg;
-    cv::Mat NDWIImg;
-    cv::Mat SAVIImg;
 
     int row;
     int col;

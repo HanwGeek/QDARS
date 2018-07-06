@@ -26,8 +26,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     h_btnBuildExtract = new QToolButton(this);
     h_btnBuildExtract->setText("Building Extract");
-    h_btnBuildExtract->setGeometry(100, 0, 200, 20);
+    h_btnBuildExtract->setGeometry(100, 0, 150, 20);
     connect(h_btnBuildExtract, SIGNAL(clicked()), this, SLOT(activateBuildExtract()));
+
+    h_btnKmeans = new QToolButton(this);
+    h_btnKmeans->setText(("Kmeans Cluster"));
+    h_btnKmeans->setGeometry(250, 0, 150, 20);
+    connect(h_btnKmeans, SIGNAL(clicked()), this, SLOT(activateKmeans()));
 }
 
 MainWindow::~MainWindow()
@@ -95,6 +100,13 @@ void MainWindow::activateBuildExtract()
     h_imgBuildExtract->extract();
 }
 
+void MainWindow::activateKmeans()
+{
+    h_kmeans = new QKmeans(h_images[h_tabs->currentIndex()]);
+    connect(h_kmeans, SIGNAL(emitNewImgData(cv::Mat*,int)), this, SLOT(creatNewTab(cv::Mat*,int)));
+    h_kmeans->divide();
+}
+
 void MainWindow::creatNewTab(cv::Mat *img, int numBands)
 {
     QImgData *newImage = new QImgData(img, numBands);
@@ -106,6 +118,7 @@ void MainWindow::creatNewTab(cv::Mat *img, int numBands)
         connect(h_images[h_preIndex]->imgView, SIGNAL(emitNowPos(QPointF)), this, SLOT(updateStatusBar(QPointF)));
     }
 }
+
 
 
 

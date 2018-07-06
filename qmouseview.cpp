@@ -13,7 +13,7 @@ QMouseView::~QMouseView()
 
 void QMouseView::mouseMoveEvent(QMouseEvent *e)
 {
-    emit emitNowPos(ImageToMap(mapToScene(e->x(), e->y())));
+    emit emitNowPos(ImageToMap(mapFromScene(e->x(), e->y())));
 }
 
 void QMouseView::mousePressEvent(QMouseEvent *e)
@@ -41,7 +41,6 @@ QPointF QMouseView::ImageToMap(QPointF p)
     int x = p.x() * pixelSize + upperLeftX;
     int y = upperLeftY - p.y() * pixelSize;
     return QPointF(x, y);
-
 }
 
 

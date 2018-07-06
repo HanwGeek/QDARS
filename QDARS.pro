@@ -29,14 +29,16 @@ SOURCES += \
     qmouseview.cpp \
     qimgdata.cpp \
     qimgfusion.cpp \
-    qbuildextract.cpp
+    qbuildextract.cpp \
+    qkmeans.cpp
 
 HEADERS += \
         mainwindow.h \
     qmouseview.h \
     qimgdata.h \
     qimgfusion.h \
-    qbuildextract.h
+    qbuildextract.h \
+    qkmeans.h
 
 INCLUDEPATH += /usr/local/include \
                /usr/local/include/opencv \

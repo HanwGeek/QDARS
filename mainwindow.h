@@ -28,9 +28,11 @@
 #include <opencv2/imgcodecs.hpp>
 #include <qimgdata.h>
 #include <qimgfusion.h>
+#include <qkmeans.h>
 #include <qbuildextract.h>
 #include <math.h>
 #include <QDebug>
+#include <QToolBox>
 
 class MainWindow : public QMainWindow
 {
@@ -48,17 +50,21 @@ public slots:
     void updateStatusBar(QPointF p);
     void activateFusion();
     void activateBuildExtract();
+    void activateKmeans();
     void creatNewTab(cv::Mat *img, int numBands);
     //void bcastImages(QVector<QImgData*> *images);
 private:
     QTabWidget* h_tabs;
+    QToolBox *h_toolbox;
     QToolButton *h_btnImport;
     QToolButton *h_btnImgSave;
     QToolButton *h_btnFusion;
     QToolButton *h_btnBuildExtract;
+    QToolButton *h_btnKmeans;
 
     QImgFusion *h_imgFusion;
     QBuildExtract *h_imgBuildExtract;
+    QKmeans *h_kmeans;
     int h_imgNum;
     int h_preIndex;
     double *h_weight;

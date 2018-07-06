@@ -41,7 +41,7 @@ void QBuildExtract::extract()
             SAVI = (NIR - red)*(1 + alpha) / (NIR + red + alpha);
             double _t = (NDWI + SAVI) / 2;
             MIBI = (SNDBI - _t) / (SNDBI + _t);
-            if (MIBI < 1.7) resImg->at<unsigned char>(i, j) = 0;
+            if (MIBI < 1.9) resImg->at<unsigned char>(i, j) = 0;
             else resImg->at<unsigned char>(i, j) = 255;
             //resImg->at<unsigned char>(i, j) = (unsigned char)(MIBI * 255);
         }

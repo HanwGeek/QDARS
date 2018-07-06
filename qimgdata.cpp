@@ -72,7 +72,6 @@ QImgData::QImgData(cv::Mat *srcImg, int numBands)
     imgScene = new QGraphicsScene(this);
 
     band = numBands;
-    qDebug() << band;
     img = new cv::Mat[band];
     for (int i = 0; i < band; i++)
     {
@@ -127,7 +126,6 @@ QPointF QImgData::ImageToMap(QPointF p)
 
 void QImgData::imgShow(cv::Mat image)
 {
-    qDebug() << isConvert;
     if (isConvert == 0 && image.channels() == 3)
     {
         cv::cvtColor(image, image, CV_BGR2RGB);
